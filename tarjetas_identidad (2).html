@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarjetas de Identidad — ¿Quién eres tú?</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --y7: #FF6B6B; --y7b: #FFE66D; --y7c: #4ECDC4;
+    --y8: #45B7D1; --y8b: #96CEB4; --y8c: #FFEAA7;
+    --y9: #6BCB77; --y9b: #4D96FF; --y9c: #FFD93D;
+    --y10: #C77DFF; --y10b: #FF9A3C; --y10c: #06D6A0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #1a1a2e;
+    padding: 30px 20px;
+    min-height: 100vh;
+  }
+
+  .page-title {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .page-title h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 2.8rem;
+    background: linear-gradient(135deg, #FF6B6B, #FFE66D, #4ECDC4, #C77DFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .page-title p {
+    color: #aaa;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .year-section {
+    margin-bottom: 50px;
+  }
+
+  .year-label {
+    display: inline-block;
+    font-family: 'Pacifico', cursive;
+    font-size: 1.4rem;
+    padding: 8px 24px;
+    border-radius: 50px;
+    margin-bottom: 24px;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+  .y7-label { background: linear-gradient(135deg, var(--y7), var(--y7b)); }
+  .y8-label { background: linear-gradient(135deg, var(--y8), var(--y8b)); }
+  .y9-label { background: linear-gradient(135deg, var(--y9), var(--y9b)); }
+  .y10-label { background: linear-gradient(135deg, var(--y10), var(--y10b)); }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    border-radius: 20px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    page-break-inside: avoid;
+    break-inside: avoid;
+    transition: transform 0.2s;
+  }
+  .card:hover { transform: translateY(-4px); }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    opacity: 0.25;
+  }
+  .card::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; left: -20px;
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    opacity: 0.2;
+  }
+
+  /* Year 7 cards */
+  .card-y7 { background: linear-gradient(145deg, #fff5f5, #fff9e6); border: 3px solid var(--y7); }
+  .card-y7::before { background: var(--y7); }
+  .card-y7::after { background: var(--y7b); }
+  .card-y7 .card-header { background: linear-gradient(135deg, var(--y7), #ff8e53); }
+
+  /* Year 8 cards */
+  .card-y8 { background: linear-gradient(145deg, #f0f9ff, #f0fff8); border: 3px solid var(--y8); }
+  .card-y8::before { background: var(--y8); }
+  .card-y8::after { background: var(--y8b); }
+  .card-y8 .card-header { background: linear-gradient(135deg, var(--y8), var(--y8b)); }
+
+  /* Year 9 cards */
+  .card-y9 { background: linear-gradient(145deg, #f0fff4, #fffbf0); border: 3px solid var(--y9); }
+  .card-y9::before { background: var(--y9); }
+  .card-y9::after { background: var(--y9c); }
+  .card-y9 .card-header { background: linear-gradient(135deg, var(--y9), var(--y9b)); }
+
+  /* Year 10 cards */
+  .card-y10 { background: linear-gradient(145deg, #fdf5ff, #fff8f0); border: 3px solid var(--y10); }
+  .card-y10::before { background: var(--y10); }
+  .card-y10::after { background: var(--y10b); }
+  .card-y10 .card-header { background: linear-gradient(135deg, var(--y10), var(--y10b)); }
+
+  .card-header {
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-header .flag { font-size: 1.4rem; }
+  .card-header .label {
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  .card-name {
+    font-family: 'Pacifico', cursive;
+    font-size: 1.15rem;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+  .card-y7 .card-name { color: var(--y7); }
+  .card-y8 .card-name { color: var(--y8); }
+  .card-y9 .card-name { color: var(--y9b); }
+  .card-y10 .card-name { color: var(--y10); }
+
+  .card-lines { list-style: none; }
+  .card-lines li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #333;
+    padding: 5px 0;
+    border-bottom: 1px dashed #e0e0e0;
+    line-height: 1.4;
+  }
+  .card-lines li:last-child { border-bottom: none; }
+  .card-lines li .icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+  .card-lines li .translation {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #999;
+    margin-top: 1px;
+  }
+
+  .print-tip {
+    text-align: center;
+    margin-top: 50px;
+    padding: 16px 24px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    color: #aaa;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .print-tip strong { color: #fff; }
+
+  .cut-line {
+    border: none;
+    border-top: 2px dashed rgba(255,255,255,0.15);
+    margin: 40px 0;
+    position: relative;
+  }
+  .cut-line::before {
+    content: '✂ recortar';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a1a2e;
+    padding: 0 12px;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+
+  @media print {
+    body { background: white; padding: 10px; }
+    .page-title h1 { color: #333; -webkit-text-fill-color: #333; }
+    .page-title p { color: #666; }
+    .year-label { color: #333 !important; }
+    .card { box-shadow: none; border-width: 2px; break-inside: avoid; }
+    .cards-grid { gap: 12px; }
+    .cut-line { border-top: 1px dashed #ccc; }
+    .cut-line::before { background: white; color: #ccc; }
+    .print-tip { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">
+  <h1>¿Quién eres tú?</h1>
+  <p>Tarjetas de Identidad · Años 7–10 · Imprime y recorta</p>
+</div>
+
+<!-- ─── AÑO 7 ─────────────────────────────────────────── -->
+<div class="year-section">
+  <div class="year-label y7-label">⭐ Año 7 — Muy básico</div>
+  <div class="cards-grid" id="cards-y7"></div>
+</div>
+
+<hr class="cut-line">
+
+<!-- ─── AÑO 8 ─────────────────────────────────────────── -->
+<div class="year-section">
+  <div class="year-label y8-label">⭐⭐ Año 8 — Básico</div>
+  <div class="cards-grid" id="cards-y8"></div>
+</div>
+
+<hr class="cut-line">
+
+<!-- ─── AÑO 9 ─────────────────────────────────────────── -->
+<div class="year-section">
+  <div class="year-label y9-label">⭐⭐⭐ Año 9 — Intermedio bajo</div>
+  <div class="cards-grid" id="cards-y9"></div>
+</div>
+
+<hr class="cut-line">
+
+<!-- ─── AÑO 10 ────────────────────────────────────────── -->
+<div class="year-section">
+  <div class="year-label y10-label">⭐⭐⭐⭐ Año 10 — Intermedio</div>
+  <div class="cards-grid" id="cards-y10"></div>
+</div>
+
+<div class="print-tip">
+  💡 <strong>Para imprimir:</strong> Ctrl+P → Escala al 100% → Imprimir en color → Recortar por las líneas discontinuas
+</div>
+
+<script>
+const data = {
+  y7: {
+    cls: "card-y7",
+    cards: [
+      { name: "Carlos 😊", lines: [{ icon: "🎂", text: "Tengo 12 años", tr: "I am 12 years old" }, { icon: "⭐", text: "Me gusta el fútbol", tr: "I like football" }] },
+      { name: "Sofía 😊", lines: [{ icon: "🎂", text: "Tengo 13 años", tr: "I am 13 years old" }, { icon: "⭐", text: "Me gusta la música", tr: "I like music" }] },
+      { name: "Miguel 😊", lines: [{ icon: "🎂", text: "Tengo 12 años", tr: "I am 12 years old" }, { icon: "⭐", text: "Me gusta comer", tr: "I like eating" }] },
+      { name: "Lucía 😊", lines: [{ icon: "🎂", text: "Tengo 13 años", tr: "I am 13 years old" }, { icon: "⭐", text: "Me gusta bailar", tr: "I like dancing" }] },
+      { name: "Andrés 😊", lines: [{ icon: "🎂", text: "Tengo 12 años", tr: "I am 12 years old" }, { icon: "⭐", text: "Me gusta los videojuegos", tr: "I like video games" }] },
+      { name: "Elena 😊", lines: [{ icon: "🎂", text: "Tengo 13 años", tr: "I am 13 years old" }, { icon: "⭐", text: "Me gusta los animales", tr: "I like animals" }] },
+      { name: "Pablo 😊", lines: [{ icon: "🎂", text: "Tengo 12 años", tr: "I am 12 years old" }, { icon: "⭐", text: "Me gusta la música", tr: "I like music" }] },
+      { name: "Carmen 😊", lines: [{ icon: "🎂", text: "Tengo 13 años", tr: "I am 13 years old" }, { icon: "⭐", text: "Me gusta el fútbol", tr: "I like football" }] },
+      { name: "Diego 😊", lines: [{ icon: "🎂", text: "Tengo 12 años", tr: "I am 12 years old" }, { icon: "⭐", text: "Me gusta bailar", tr: "I like dancing" }] },
+      { name: "Isabel 😊", lines: [{ icon: "🎂", text: "Tengo 13 años", tr: "I am 13 years old" }, { icon: "⭐", text: "Me gusta comer", tr: "I like eating" }] },
+      { name: "Javier 😊", lines: [{ icon: "🎂", text: "Tengo 12 años", tr: "I am 12 years old" }, { icon: "⭐", text: "Me gusta los animales", tr: "I like animals" }] },
+      { name: "Marta 😊", lines: [{ icon: "🎂", text: "Tengo 13 años", tr: "I am 13 years old" }, { icon: "⭐", text: "Me gusta los videojuegos", tr: "I like video games" }] },
+    ]
+  },
+  y8: {
+    cls: "card-y8",
+    cards: [
+      { name: "Me llamo Carlos.", lines: [{ icon: "🎂", text: "Tengo 13 años.", tr: "I am 13 years old" }, { icon: "📍", text: "Soy de Kuala Lumpur.", tr: "I am from KL" }, { icon: "💙", text: "Me gusta el fútbol.", tr: "I like football" }] },
+      { name: "Me llamo Sofía.", lines: [{ icon: "🎂", text: "Tengo 14 años.", tr: "I am 14 years old" }, { icon: "📍", text: "Soy de Penang.", tr: "I am from Penang" }, { icon: "💙", text: "Me gusta la música.", tr: "I like music" }] },
+      { name: "Me llamo Miguel.", lines: [{ icon: "🎂", text: "Tengo 13 años.", tr: "" }, { icon: "📍", text: "Soy de Johor Bahru.", tr: "" }, { icon: "💙", text: "Me gusta comer.", tr: "" }] },
+      { name: "Me llamo Lucía.", lines: [{ icon: "🎂", text: "Tengo 14 años.", tr: "" }, { icon: "📍", text: "Soy de Ipoh.", tr: "" }, { icon: "💙", text: "Me gusta bailar.", tr: "" }] },
+      { name: "Me llamo Andrés.", lines: [{ icon: "🎂", text: "Tengo 13 años.", tr: "" }, { icon: "📍", text: "Soy de Kota Kinabalu.", tr: "" }, { icon: "💙", text: "Me gusta los videojuegos.", tr: "" }] },
+      { name: "Me llamo Elena.", lines: [{ icon: "🎂", text: "Tengo 14 años.", tr: "" }, { icon: "📍", text: "Soy de Melaka.", tr: "" }, { icon: "💙", text: "Me gusta cocinar.", tr: "" }] },
+      { name: "Me llamo Pablo.", lines: [{ icon: "🎂", text: "Tengo 13 años.", tr: "" }, { icon: "📍", text: "Soy de Shah Alam.", tr: "" }, { icon: "💙", text: "Me gusta leer.", tr: "" }] },
+      { name: "Me llamo Carmen.", lines: [{ icon: "🎂", text: "Tengo 14 años.", tr: "" }, { icon: "📍", text: "Soy de Kuching.", tr: "" }, { icon: "💙", text: "Me gusta el arte.", tr: "" }] },
+      { name: "Me llamo Diego.", lines: [{ icon: "🎂", text: "Tengo 13 años.", tr: "" }, { icon: "📍", text: "Soy de Putrajaya.", tr: "" }, { icon: "💙", text: "Me gusta el deporte.", tr: "" }] },
+      { name: "Me llamo Isabel.", lines: [{ icon: "🎂", text: "Tengo 14 años.", tr: "" }, { icon: "📍", text: "Soy de George Town.", tr: "" }, { icon: "💙", text: "Me gusta la fotografía.", tr: "" }] },
+      { name: "Me llamo Javier.", lines: [{ icon: "🎂", text: "Tengo 13 años.", tr: "" }, { icon: "📍", text: "Soy de Subang Jaya.", tr: "" }, { icon: "💙", text: "Me gusta el tenis.", tr: "" }] },
+      { name: "Me llamo Marta.", lines: [{ icon: "🎂", text: "Tengo 14 años.", tr: "" }, { icon: "📍", text: "Soy de Alor Setar.", tr: "" }, { icon: "💙", text: "Me gusta cantar.", tr: "" }] },
+    ]
+  },
+  y9: {
+    cls: "card-y9",
+    cards: [
+      { name: "Me llamo Carlos.", lines: [{ icon: "🎂", text: "Tengo 14 años." }, { icon: "📍", text: "Soy de Kuala Lumpur." }, { icon: "✅", text: "Me gusta el fútbol." }, { icon: "❌", text: "No me gusta estudiar." }] },
+      { name: "Me llamo Sofía.", lines: [{ icon: "🎂", text: "Tengo 15 años." }, { icon: "📍", text: "Soy de Penang." }, { icon: "✅", text: "Me gusta la música." }, { icon: "❌", text: "No me gusta madrugar." }] },
+      { name: "Me llamo Miguel.", lines: [{ icon: "🎂", text: "Tengo 14 años." }, { icon: "📍", text: "Soy de Johor Bahru." }, { icon: "✅", text: "Me gusta comer." }, { icon: "❌", text: "No me gusta el calor." }] },
+      { name: "Me llamo Lucía.", lines: [{ icon: "🎂", text: "Tengo 15 años." }, { icon: "📍", text: "Soy de Ipoh." }, { icon: "✅", text: "Me gusta bailar." }, { icon: "❌", text: "No me gusta las matemáticas." }] },
+      { name: "Me llamo Andrés.", lines: [{ icon: "🎂", text: "Tengo 14 años." }, { icon: "📍", text: "Soy de Kota Kinabalu." }, { icon: "✅", text: "Me gusta los videojuegos." }, { icon: "❌", text: "No me gusta limpiar." }] },
+      { name: "Me llamo Elena.", lines: [{ icon: "🎂", text: "Tengo 15 años." }, { icon: "📍", text: "Soy de Melaka." }, { icon: "✅", text: "Me gusta cocinar." }, { icon: "❌", text: "No me gusta las matemáticas." }] },
+      { name: "Me llamo Pablo.", lines: [{ icon: "🎂", text: "Tengo 14 años." }, { icon: "📍", text: "Soy de Shah Alam." }, { icon: "✅", text: "Me gusta leer." }, { icon: "❌", text: "No me gusta madrugar." }] },
+      { name: "Me llamo Carmen.", lines: [{ icon: "🎂", text: "Tengo 15 años." }, { icon: "📍", text: "Soy de Kuching." }, { icon: "✅", text: "Me gusta el arte." }, { icon: "❌", text: "No me gusta el tráfico." }] },
+      { name: "Me llamo Diego.", lines: [{ icon: "🎂", text: "Tengo 14 años." }, { icon: "📍", text: "Soy de Putrajaya." }, { icon: "✅", text: "Me gusta el baloncesto." }, { icon: "❌", text: "No me gusta estudiar." }] },
+      { name: "Me llamo Isabel.", lines: [{ icon: "🎂", text: "Tengo 15 años." }, { icon: "📍", text: "Soy de George Town." }, { icon: "✅", text: "Me gusta la fotografía." }, { icon: "❌", text: "No me gusta madrugar." }] },
+      { name: "Me llamo Javier.", lines: [{ icon: "🎂", text: "Tengo 14 años." }, { icon: "📍", text: "Soy de Subang Jaya." }, { icon: "✅", text: "Me gusta el tenis." }, { icon: "❌", text: "No me gusta estudiar." }] },
+      { name: "Me llamo Marta.", lines: [{ icon: "🎂", text: "Tengo 15 años." }, { icon: "📍", text: "Soy de Alor Setar." }, { icon: "✅", text: "Me gusta cantar." }, { icon: "❌", text: "No me gusta las tareas." }] },
+    ]
+  },
+  y10: {
+    cls: "card-y10",
+    cards: [
+      { name: "Carlos Ruiz", lines: [{ icon: "🎂", text: "Tengo 15 años. Soy de KL." }, { icon: "✅", text: "Me gusta el fútbol pero no me gusta estudiar." }, { icon: "👨‍👩‍👦", text: "Tengo dos hermanos." }, { icon: "📚", text: "Mi asignatura favorita es la EF." }] },
+      { name: "Sofía Martín", lines: [{ icon: "🎂", text: "Tengo 16 años. Soy de Penang." }, { icon: "✅", text: "Me gusta la música pero no me gusta madrugar." }, { icon: "👨‍👩‍👧", text: "Tengo una hermana." }, { icon: "📚", text: "Mi asignatura favorita es el arte." }] },
+      { name: "Miguel Torres", lines: [{ icon: "🎂", text: "Tengo 15 años. Soy de JB." }, { icon: "✅", text: "Me gusta comer pero no me gusta el calor." }, { icon: "👨‍👩‍👦", text: "Tengo tres hermanos." }, { icon: "📚", text: "Mi asignatura favorita es informática." }] },
+      { name: "Lucía Gómez", lines: [{ icon: "🎂", text: "Tengo 16 años. Soy de Ipoh." }, { icon: "✅", text: "Me gusta bailar pero no me gusta matemáticas." }, { icon: "👤", text: "No tengo hermanos." }, { icon: "📚", text: "Mi asignatura favorita es la música." }] },
+      { name: "Andrés López", lines: [{ icon: "🎂", text: "Tengo 15 años. Soy de KK." }, { icon: "✅", text: "Me gusta los videojuegos pero no me gusta limpiar." }, { icon: "👨‍👩‍👦", text: "Tengo un hermano." }, { icon: "📚", text: "Mi asignatura favorita es tecnología." }] },
+      { name: "Elena Sánchez", lines: [{ icon: "🎂", text: "Tengo 16 años. Soy de Melaka." }, { icon: "✅", text: "Me gusta cocinar pero no me gusta trabajar." }, { icon: "👨‍👩‍👧‍👧", text: "Tengo dos hermanas." }, { icon: "📚", text: "Mi asignatura favorita es biología." }] },
+      { name: "Pablo Díaz", lines: [{ icon: "🎂", text: "Tengo 15 años. Soy de Shah Alam." }, { icon: "✅", text: "Me gusta leer pero no me gusta madrugar." }, { icon: "👨‍👩‍👧", text: "Tengo una hermana." }, { icon: "📚", text: "Mi asignatura favorita es historia." }] },
+      { name: "Carmen Pérez", lines: [{ icon: "🎂", text: "Tengo 16 años. Soy de Kuching." }, { icon: "✅", text: "Me gusta el arte pero no me gusta el tráfico." }, { icon: "👤", text: "No tengo hermanos." }, { icon: "📚", text: "Mi asignatura favorita es español." }] },
+      { name: "Diego Vargas", lines: [{ icon: "🎂", text: "Tengo 15 años. Soy de Putrajaya." }, { icon: "✅", text: "Me gusta el baloncesto pero no me gusta estudiar." }, { icon: "👨‍👩‍👦", text: "Tengo dos hermanos." }, { icon: "📚", text: "Mi asignatura favorita es geografía." }] },
+      { name: "Isabel Cruz", lines: [{ icon: "🎂", text: "Tengo 16 años. Soy de George Town." }, { icon: "✅", text: "Me gusta la fotografía pero no me gusta madrugar." }, { icon: "👨‍👩‍👦‍👧", text: "Tengo un hermano y una hermana." }, { icon: "📚", text: "Mi asignatura favorita es química." }] },
+      { name: "Javier Romero", lines: [{ icon: "🎂", text: "Tengo 15 años. Soy de Subang Jaya." }, { icon: "✅", text: "Me gusta el tenis pero no me gusta estudiar." }, { icon: "👨‍👩‍👧‍👧‍👧", text: "Tengo tres hermanas." }, { icon: "📚", text: "Mi asignatura favorita es educación física." }] },
+      { name: "Marta Flores", lines: [{ icon: "🎂", text: "Tengo 16 años. Soy de Alor Setar." }, { icon: "✅", text: "Me gusta cantar pero no me gusta las tareas." }, { icon: "👨‍👩‍👦", text: "Tengo un hermano." }, { icon: "📚", text: "Mi asignatura favorita es literatura." }] },
+    ]
+  }
+};
+
+function renderCards(yearKey, containerId) {
+  const { cls, cards } = data[yearKey];
+  const container = document.getElementById(containerId);
+  cards.forEach(card => {
+    const div = document.createElement('div');
+    div.className = `card ${cls}`;
+    div.innerHTML = `
+      <div class="card-header">
+        <span class="flag">⭐</span>
+        <span class="label">Tarjeta de Identidad</span>
+      </div>
+      <div class="card-name">${card.name}</div>
+      <ul class="card-lines">
+        ${card.lines.map(l => `
+          <li>
+            <span class="icon">${l.icon}</span>
+            <span>${l.text}${l.tr ? `<span class="translation">${l.tr}</span>` : ''}</span>
+          </li>`).join('')}
+      </ul>`;
+    container.appendChild(div);
+  });
+}
+
+renderCards('y7', 'cards-y7');
+renderCards('y8', 'cards-y8');
+renderCards('y9', 'cards-y9');
+renderCards('y10', 'cards-y10');
+</script>
+</body>
+</html>

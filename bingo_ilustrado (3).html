@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bingo de Personas — Años 7–10</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #0f0f1a;
+    padding: 30px 20px;
+  }
+
+  .page-title {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  .page-title h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 2.6rem;
+    background: linear-gradient(135deg, #FF6B6B, #FFE66D, #4ECDC4, #C77DFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .page-title p { color: #888; font-size: 1rem; font-weight: 700; }
+
+  /* ── One bingo card per page when printing ── */
+  .bingo-page {
+    margin-bottom: 70px;
+    page-break-after: always;
+    break-after: page;
+  }
+  .bingo-page:last-child { page-break-after: auto; break-after: auto; }
+
+  .bingo-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .year-badge {
+    display: inline-block;
+    font-family: 'Pacifico', cursive;
+    font-size: 1.2rem;
+    padding: 8px 28px;
+    border-radius: 50px;
+    color: white;
+    margin-bottom: 12px;
+  }
+  .bingo-title {
+    font-family: 'Pacifico', cursive;
+    font-size: 2rem;
+    margin-bottom: 6px;
+  }
+  .bingo-subtitle {
+    font-size: 0.9rem;
+    font-weight: 700;
+    opacity: 0.7;
+    margin-bottom: 4px;
+  }
+  .bingo-instruction {
+    font-size: 0.82rem;
+    font-weight: 600;
+    opacity: 0.55;
+  }
+
+  /* ── Grid ── */
+  .bingo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    max-width: 680px;
+    margin: 0 auto 20px;
+  }
+
+  .bingo-cell {
+    border-radius: 18px;
+    padding: 16px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 140px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .bingo-cell:hover { transform: scale(1.03); }
+
+  .bingo-cell .emoji {
+    font-size: 2.8rem;
+    line-height: 1;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  }
+  .bingo-cell .cell-label {
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .bingo-cell .cell-name {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-align: center;
+    opacity: 0.55;
+    font-style: italic;
+    min-height: 16px;
+  }
+
+  /* Free space */
+  .bingo-cell.free {
+    background: linear-gradient(135deg, #FFD700, #FFA500) !important;
+    border: 3px solid rgba(255,255,255,0.6) !important;
+  }
+  .bingo-cell.free .cell-label { color: white; font-size: 1rem; }
+
+  /* ── Name field at bottom ── */
+  .name-field {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: 0.9rem;
+  }
+  .name-field input {
+    flex: 1;
+    border: none;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    outline: none;
+    color: inherit;
+  }
+
+  /* ── Questions reference ── */
+  .questions-box {
+    max-width: 680px;
+    margin: 16px auto 0;
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 20px;
+  }
+  .questions-box .q-title {
+    grid-column: 1 / -1;
+    font-weight: 800;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .q-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .q-item .q-emoji { font-size: 1rem; flex-shrink: 0; }
+  .q-item .q-spanish { display: block; }
+  .q-item .q-en { display: block; font-weight: 600; opacity: 0.55; font-size: 0.7rem; }
+
+  .cut-divider {
+    border: none;
+    border-top: 2px dashed rgba(255,255,255,0.1);
+    margin: 40px auto;
+    max-width: 680px;
+    position: relative;
+  }
+  .cut-divider::before {
+    content: '✂  nueva hoja al imprimir';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0f0f1a;
+    padding: 0 14px;
+    color: rgba(255,255,255,0.2);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+
+  /* ─── YEAR THEMES ─────────────────────────────────── */
+
+  /* Year 7 — coral/yellow */
+  .y7 .year-badge { background: linear-gradient(135deg, #FF6B6B, #FFE66D); }
+  .y7 .bingo-title { color: #FF6B6B; }
+  .y7 .bingo-subtitle { color: #FF6B6B; }
+  .y7 .bingo-instruction { color: #888; }
+  .y7 .bingo-cell { background: linear-gradient(145deg, #fff5f5, #fffbe6); border: 2.5px solid #FF6B6B; color: #333; }
+  .y7 .name-field { background: rgba(255,107,107,0.12); color: #FF6B6B; border: 2px solid rgba(255,107,107,0.3); }
+  .y7 .questions-box { background: rgba(255,107,107,0.08); border: 1.5px solid rgba(255,107,107,0.2); color: #FF6B6B; }
+
+  /* Year 8 — blue/teal */
+  .y8 .year-badge { background: linear-gradient(135deg, #45B7D1, #96CEB4); }
+  .y8 .bingo-title { color: #45B7D1; }
+  .y8 .bingo-subtitle { color: #45B7D1; }
+  .y8 .bingo-cell { background: linear-gradient(145deg, #f0faff, #f0fff8); border: 2.5px solid #45B7D1; color: #333; }
+  .y8 .name-field { background: rgba(69,183,209,0.12); color: #45B7D1; border: 2px solid rgba(69,183,209,0.3); }
+  .y8 .questions-box { background: rgba(69,183,209,0.08); border: 1.5px solid rgba(69,183,209,0.25); color: #2a8fa3; }
+
+  /* Year 9 — green/blue */
+  .y9 .year-badge { background: linear-gradient(135deg, #6BCB77, #4D96FF); }
+  .y9 .bingo-title { color: #6BCB77; }
+  .y9 .bingo-subtitle { color: #6BCB77; }
+  .y9 .bingo-cell { background: linear-gradient(145deg, #f0fff4, #f0f8ff); border: 2.5px solid #6BCB77; color: #333; }
+  .y9 .name-field { background: rgba(107,203,119,0.12); color: #3a9e47; border: 2px solid rgba(107,203,119,0.3); }
+  .y9 .questions-box { background: rgba(107,203,119,0.08); border: 1.5px solid rgba(107,203,119,0.25); color: #3a9e47; }
+
+  /* Year 10 — purple/orange */
+  .y10 .year-badge { background: linear-gradient(135deg, #C77DFF, #FF9A3C); }
+  .y10 .bingo-title { color: #C77DFF; }
+  .y10 .bingo-subtitle { color: #C77DFF; }
+  .y10 .bingo-cell { background: linear-gradient(145deg, #fdf5ff, #fff8f0); border: 2.5px solid #C77DFF; color: #333; }
+  .y10 .name-field { background: rgba(199,125,255,0.12); color: #9b4dca; border: 2px solid rgba(199,125,255,0.3); }
+  .y10 .questions-box { background: rgba(199,125,255,0.08); border: 1.5px solid rgba(199,125,255,0.25); color: #9b4dca; }
+
+  @media print {
+    body { background: white; padding: 10px; }
+    .page-title { display: none; }
+    .cut-divider { display: none; }
+    .bingo-page { margin-bottom: 0; }
+    .bingo-cell { box-shadow: none; }
+    .bingo-title { -webkit-text-fill-color: currentColor !important; }
+    .year-badge { color: white !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">
+  <h1>🎲 Bingo de Personas</h1>
+  <p>Años 7 · 8 · 9 · 10 — Imprime una hoja por alumno · cada año tiene su bingo</p>
+</div>
+
+<div id="bingo-container"></div>
+
+<script>
+const years = [
+  {
+    key: "y7",
+    badge: "⭐ Año 7",
+    title: "Bingo de Personas",
+    subtitle: "Pregunta a tus compañeros. ¡Escribe su nombre si dicen SÍ!",
+    instruction: "Completa una línea → ↓ ↗ y grita  ¡BINGO! 🎉",
+    cells: [
+      { emoji: "⚽", label: "Le gusta\nel fútbol", question: "¿Te gusta\nel fútbol?" },
+      { emoji: "🎂", label: "Tiene\n12 años", question: "¿Tienes\n12 años?" },
+      { emoji: "🎵", label: "Le gusta\nla música", question: "¿Te gusta\nla música?" },
+      { emoji: "🍜", label: "Le gusta\ncomer", question: "¿Te gusta\ncomer?" },
+      { emoji: "⭐", label: "LIBRE", free: true },
+      { emoji: "💃", label: "Le gusta\nbailar", question: "¿Te gusta\nbailar?" },
+      { emoji: "🎂", label: "Tiene\n13 años", question: "¿Tienes\n13 años?" },
+      { emoji: "🐱", label: "Le gustan\nlos animales", question: "¿Te gustan\nlos animales?" },
+      { emoji: "🎮", label: "Le gustan\nlos videojuegos", question: "¿Te gustan\nlos videojuegos?" },
+    ],
+    questions: [
+      { emoji: "⚽", spanish: "¿Te gusta el fútbol?", en: "Do you like football?" },
+      { emoji: "🎵", spanish: "¿Te gusta la música?", en: "Do you like music?" },
+      { emoji: "🍜", spanish: "¿Te gusta comer?", en: "Do you like eating?" },
+      { emoji: "💃", spanish: "¿Te gusta bailar?", en: "Do you like dancing?" },
+      { emoji: "🎮", spanish: "¿Te gustan los videojuegos?", en: "Do you like video games?" },
+      { emoji: "🐱", spanish: "¿Te gustan los animales?", en: "Do you like animals?" },
+      { emoji: "🎂", spanish: "¿Tienes 12 años?", en: "Are you 12 years old?" },
+      { emoji: "🎂", spanish: "¿Tienes 13 años?", en: "Are you 13 years old?" },
+    ]
+  },
+  {
+    key: "y8",
+    badge: "⭐⭐ Año 8",
+    title: "Bingo de Personas",
+    subtitle: "Pregunta a tus compañeros. ¡Escribe su nombre si dicen SÍ!",
+    instruction: "Completa una línea → ↓ ↗ y grita  ¡BINGO! 🎉",
+    cells: [
+      { emoji: "⚽", label: "Le gusta\nel fútbol", question: "¿Te gusta\nel fútbol?" },
+      { emoji: "🎂", label: "Tiene\n15 años", question: "¿Tienes\n15 años?" },
+      { emoji: "🎵", label: "Le gusta\nla música", question: "¿Te gusta\nla música?" },
+      { emoji: "🍜", label: "Le gusta\ncomer", question: "¿Te gusta\ncomer?" },
+      { emoji: "⭐", label: "LIBRE", free: true },
+      { emoji: "👦👧", label: "Tiene un\nhermano/a", question: "¿Tienes un\nhermano o hermana?" },
+      { emoji: "🎂", label: "Tiene\n14 años", question: "¿Tienes\n14 años?" },
+      { emoji: "💃", label: "Le gusta\nbailar", question: "¿Te gusta\nbailar?" },
+      { emoji: "🎮", label: "Le gustan\nlos videojuegos", question: "¿Te gustan\nlos videojuegos?" },
+    ],
+    questions: [
+      { emoji: "⚽", spanish: "¿Te gusta el fútbol?", en: "Do you like football?" },
+      { emoji: "🎵", spanish: "¿Te gusta la música?", en: "Do you like music?" },
+      { emoji: "🍜", spanish: "¿Te gusta comer?", en: "Do you like eating?" },
+      { emoji: "💃", spanish: "¿Te gusta bailar?", en: "Do you like dancing?" },
+      { emoji: "🎮", spanish: "¿Te gustan los videojuegos?", en: "Do you like video games?" },
+      { emoji: "👦👧", spanish: "¿Tienes un hermano o hermana?", en: "Do you have a sibling?" },
+      { emoji: "🎂", spanish: "¿Tienes 14 años?", en: "Are you 14 years old?" },
+      { emoji: "🎂", spanish: "¿Tienes 15 años?", en: "Are you 15 years old?" },
+    ]
+  },
+  {
+    key: "y9",
+    badge: "⭐⭐⭐ Año 9",
+    title: "Bingo de Personas",
+    subtitle: "Camina por la clase y pregunta. ¡Escribe el nombre si dicen SÍ!",
+    instruction: "Completa una línea → ↓ ↗ y grita  ¡BINGO! 🎉",
+    cells: [
+      { emoji: "⚽", label: "Le gusta\nel fútbol", question: "¿Te gusta\nel fútbol?" },
+      { emoji: "😤", label: "No le gusta\nestudiar", question: "¿No te gusta\nestudiar?" },
+      { emoji: "🎵", label: "Le gusta\nla música", question: "¿Te gusta\nla música?" },
+      { emoji: "👨‍👩‍👦", label: "Tiene un\nhermano/a", question: "¿Tienes un\nhermano o hermana?" },
+      { emoji: "⭐", label: "LIBRE", free: true },
+      { emoji: "🍜", label: "Le gusta\ncomer", question: "¿Te gusta\ncomer?" },
+      { emoji: "🎂", label: "Tiene\n14 años", question: "¿Tienes\n14 años?" },
+      { emoji: "😴", label: "No le gusta\nmadrugar", question: "¿No te gusta\nmadrugar?" },
+      { emoji: "💃", label: "Le gusta\nbailar", question: "¿Te gusta\nbailar?" },
+    ],
+    questions: [
+      { emoji: "⚽", spanish: "¿Te gusta el fútbol?", en: "Do you like football?" },
+      { emoji: "🎵", spanish: "¿Te gusta la música?", en: "Do you like music?" },
+      { emoji: "🍜", spanish: "¿Te gusta comer?", en: "Do you like eating?" },
+      { emoji: "💃", spanish: "¿Te gusta bailar?", en: "Do you like dancing?" },
+      { emoji: "👨‍👩‍👦", spanish: "¿Tienes un hermano o hermana?", en: "Do you have a sibling?" },
+      { emoji: "😤", spanish: "¿No te gusta estudiar?", en: "Do you not like studying?" },
+      { emoji: "😴", spanish: "¿No te gusta madrugar?", en: "Do you not like waking up early?" },
+      { emoji: "🎂", spanish: "¿Tienes 14 años?", en: "Are you 14 years old?" },
+    ]
+  },
+  {
+    key: "y10",
+    badge: "⭐⭐⭐⭐ Año 10",
+    title: "Bingo de Personas",
+    subtitle: "Haz preguntas abiertas. ¡Escribe el nombre si la respuesta coincide!",
+    instruction: "Completa una línea → ↓ ↗ y grita  ¡BINGO! 🎉",
+    cells: [
+      { emoji: "🎨", label: "Asignatura\nfavorita: arte", question: "¿Cuál es tu\nasignatura favorita?" },
+      { emoji: "👨‍👩‍👦‍👦", label: "Tiene 2\nhermanos/as", question: "¿Cuántos hermanos\ntienes?" },
+      { emoji: "🎵", label: "Le gusta\nla música", question: "¿Te gusta\nla música?" },
+      { emoji: "😴", label: "No le gusta\nmadrugar", question: "¿No te gusta\nmadrugar?" },
+      { emoji: "⭐", label: "LIBRE", free: true },
+      { emoji: "🍜", label: "Le gusta\ncomer", question: "¿Te gusta\ncomer?" },
+      { emoji: "🎂", label: "Tiene\n15 años", question: "¿Tienes\n15 años?" },
+      { emoji: "🏃", label: "Asignatura\nfavorita: EF", question: "¿Cuál es tu\nasignatura favorita?" },
+      { emoji: "😤", label: "No le gusta\nestudiar", question: "¿No te gusta\nestudiar?" },
+    ],
+    questions: [
+      { emoji: "🎨", spanish: "¿Cuál es tu asignatura favorita?", en: "What is your favourite subject?" },
+      { emoji: "👨‍👩‍👦‍👦", spanish: "¿Cuántos hermanos tienes?", en: "How many siblings do you have?" },
+      { emoji: "🎵", spanish: "¿Te gusta la música?", en: "Do you like music?" },
+      { emoji: "🍜", spanish: "¿Te gusta comer?", en: "Do you like eating?" },
+      { emoji: "😴", spanish: "¿No te gusta madrugar?", en: "Do you not like waking up early?" },
+      { emoji: "😤", spanish: "¿No te gusta estudiar?", en: "Do you not like studying?" },
+      { emoji: "🎂", spanish: "¿Tienes 15 años?", en: "Are you 15 years old?" },
+      { emoji: "🏃", spanish: "¿Te gusta la educación física?", en: "Do you like PE?" },
+    ]
+  }
+];
+
+function buildBingo(year, isLast) {
+  const container = document.createElement('div');
+  container.className = `bingo-page ${year.key}`;
+
+  // Header
+  const header = document.createElement('div');
+  header.className = 'bingo-header';
+  header.innerHTML = `
+    <div class="year-badge">${year.badge}</div>
+    <div class="bingo-title">${year.title}</div>
+    <div class="bingo-subtitle">${year.subtitle}</div>
+    <div class="bingo-instruction">${year.instruction}</div>
+  `;
+  container.appendChild(header);
+
+  // Grid
+  const grid = document.createElement('div');
+  grid.className = 'bingo-grid';
+  year.cells.forEach(cell => {
+    const div = document.createElement('div');
+    div.className = `bingo-cell${cell.free ? ' free' : ''}`;
+    div.innerHTML = `
+      <div class="emoji">${cell.emoji}</div>
+      <div class="cell-label">${cell.label.replace(/\n/g,'<br>')}</div>
+      <div class="cell-name">&nbsp;</div>
+    `;
+    if (!cell.free) {
+      div.title = cell.question;
+    }
+    grid.appendChild(div);
+  });
+  container.appendChild(grid);
+
+  // Name field
+  const nameField = document.createElement('div');
+  nameField.className = 'name-field';
+  nameField.innerHTML = `✏️ Mi nombre: <input type="text" placeholder="escribe tu nombre aquí">`;
+  container.appendChild(nameField);
+
+  // Questions box
+  const qBox = document.createElement('div');
+  qBox.className = 'questions-box';
+  qBox.innerHTML = `<div class="q-title">💬 Preguntas que puedes hacer:</div>`;
+  year.questions.forEach(q => {
+    const item = document.createElement('div');
+    item.className = 'q-item';
+    item.innerHTML = `
+      <span class="q-emoji">${q.emoji}</span>
+      <span>
+        <span class="q-spanish">${q.spanish}</span>
+        <span class="q-en">${q.en}</span>
+      </span>`;
+    qBox.appendChild(item);
+  });
+  container.appendChild(qBox);
+
+  return container;
+}
+
+const bingoContainer = document.getElementById('bingo-container');
+years.forEach((year, i) => {
+  bingoContainer.appendChild(buildBingo(year, i === years.length - 1));
+  if (i < years.length - 1) {
+    const hr = document.createElement('hr');
+    hr.className = 'cut-divider';
+    bingoContainer.appendChild(hr);
+  }
+});
+</script>
+</body>
+</html>

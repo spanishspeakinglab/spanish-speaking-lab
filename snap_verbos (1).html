@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snap de Verbos 🃏</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #111;
+    padding: 30px 20px;
+  }
+
+  .screen-header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .screen-header h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 2.2rem;
+    background: linear-gradient(135deg, #4ECDC4, #C77DFF, #FF6B6B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+  }
+  .screen-header p { color: #666; font-size: 0.88rem; font-weight: 700; }
+
+  /* ── HOW TO PLAY ── */
+  .how-to {
+    max-width: 700px;
+    margin: 0 auto 36px;
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 18px;
+    padding: 20px 24px;
+    color: rgba(255,255,255,0.7);
+  }
+  .how-to h2 {
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #FFE66D;
+    margin-bottom: 12px;
+  }
+  .how-to ol { padding-left: 20px; }
+  .how-to li { font-size: 0.88rem; font-weight: 700; margin-bottom: 6px; line-height: 1.5; }
+  .how-to li span { color: #4ECDC4; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    max-width: 700px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title h2 {
+    font-family: 'Pacifico', cursive;
+    font-size: 1.3rem;
+  }
+  .section-title .badge {
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ── CARD GRIDS ── */
+  .cards-section {
+    max-width: 700px;
+    margin: 0 auto 40px;
+  }
+  .cards-grid {
+    display: grid;
+    gap: 10px;
+  }
+  .cards-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .cards-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+  /* ── BASE CARD ── */
+  .card {
+    border-radius: 16px;
+    padding: 16px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 110px;
+    text-align: center;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; right: -20px;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    opacity: 0.15;
+  }
+
+  .card-top {
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.55;
+  }
+  .card-main {
+    font-family: 'Pacifico', cursive;
+    font-size: 1.3rem;
+    line-height: 1.1;
+  }
+  .card-emoji { font-size: 1.6rem; }
+  .card-sub {
+    font-size: 0.7rem;
+    font-weight: 700;
+    opacity: 0.5;
+  }
+  .card-match {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: rgba(0,0,0,0.12);
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+
+  /* INFINITIVE CARDS — coloured by type */
+  .card-inf.ar { background: linear-gradient(145deg, #fff0f0, #fff8ec); border: 2.5px solid #FF6B6B; color: #c0392b; }
+  .card-inf.ar::after { background: #FF6B6B; }
+  .card-inf.er { background: linear-gradient(145deg, #f0fffe, #f0faff); border: 2.5px solid #4ECDC4; color: #1a7a75; }
+  .card-inf.er::after { background: #4ECDC4; }
+  .card-inf.ir { background: linear-gradient(145deg, #fdf5ff, #f8f0ff); border: 2.5px solid #C77DFF; color: #6c3483; }
+  .card-inf.ir::after { background: #C77DFF; }
+
+  /* CONJUGATED FORM CARDS */
+  .card-form { background: linear-gradient(145deg, #f8fff8, #f0f8ff); border: 2.5px solid #6BCB77; color: #1e7e34; }
+  .card-form::after { background: #6BCB77; }
+  .card-form .card-main { color: #27ae60; }
+
+  /* PERSON CARDS */
+  .card-person { background: linear-gradient(145deg, #fffbf0, #fff5f0); border: 2.5px solid #FF9A3C; color: #d35400; }
+  .card-person::after { background: #FF9A3C; }
+  .card-person .card-main { font-size: 1.5rem; color: #e67e22; }
+
+  /* WILD CARD */
+  .card-wild { background: linear-gradient(145deg, #fffce0, #fff8f0); border: 2.5px dashed #FFE66D; color: #b7950b; }
+
+  /* ── CUT DIVIDER ── */
+  .cut-line {
+    max-width: 700px;
+    margin: 10px auto 36px;
+    border: none;
+    border-top: 2px dashed rgba(255,255,255,0.12);
+    position: relative;
+  }
+  .cut-line::before {
+    content: '✂  recortar por aquí';
+    position: absolute; top: -10px; left: 50%;
+    transform: translateX(-50%);
+    background: #111;
+    padding: 0 14px;
+    color: rgba(255,255,255,0.2);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+
+  /* ── ANSWER KEY ── */
+  .answer-key {
+    max-width: 700px;
+    margin: 0 auto 40px;
+    background: rgba(255,255,255,0.03);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 18px;
+    padding: 20px 24px;
+  }
+  .answer-key h2 {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #FFE66D;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+  .answer-table { width: 100%; border-collapse: collapse; }
+  .answer-table th {
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.4);
+    padding: 6px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    text-align: left;
+  }
+  .answer-table td {
+    padding: 8px 10px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .answer-table tr:last-child td { border-bottom: none; }
+  .answer-table .verb-col { color: #FF6B6B; }
+  .answer-table .person-col { color: #4ECDC4; }
+  .answer-table .form-col { color: #6BCB77; font-weight: 900; font-size: 1rem; }
+  .answer-table .en-col { color: rgba(255,255,255,0.35); font-size: 0.78rem; }
+
+  @media print {
+    body { background: white; padding: 8px; }
+    .screen-header, .how-to { display: none; }
+    .card { box-shadow: none; }
+    .cut-line::before { background: white; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .answer-key { page-break-before: always; break-before: page; background: white; border: 1px solid #ddd; }
+    .answer-key h2, .answer-table th { color: #666 !important; }
+    .answer-table .verb-col { color: #c0392b !important; }
+    .answer-table .person-col { color: #1a7a75 !important; }
+    .answer-table .form-col { color: #1e7e34 !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="screen-header">
+  <h1>🃏 Snap de Verbos</h1>
+  <p>Imprime · recorta · juega en equipos · ¡el más rápido gana!</p>
+</div>
+
+<div class="how-to">
+  <h2>🎮 Cómo jugar</h2>
+  <ol>
+    <li><span>Divide</span> la clase en grupos de 3–4 alumnos.</li>
+    <li><span>Reparte</span> a cada grupo un mazo mezclado de cartas (infinitivos + formas conjugadas + personas).</li>
+    <li><span>Turno a turno</span>, cada alumno saca una carta de su mazo y la pone boca arriba en el centro.</li>
+    <li>Cuando aparece un <span>infinitivo + persona + forma correcta</span> en el centro, el primero en gritar <span>¡SNAP!</span> y tocar las cartas se las lleva.</li>
+    <li>También vale hacer parejas directas: <span>infinitivo + forma conjugada correcta</span> = ¡SNAP!</li>
+    <li>Gana quien tenga <span>más cartas</span> al final.</li>
+  </ol>
+</div>
+
+<div id="cardsContainer"></div>
+
+<script>
+const verbs = [
+  { inf: "hablar", type: "ar", emoji: "🗣️", en: "to speak", conj: { yo: "hablo", tú: "hablas", "él/ella": "habla" } },
+  { inf: "escuchar", type: "ar", emoji: "👂", en: "to listen", conj: { yo: "escucho", tú: "escuchas", "él/ella": "escucha" } },
+  { inf: "bailar", type: "ar", emoji: "💃", en: "to dance", conj: { yo: "bailo", tú: "bailas", "él/ella": "baila" } },
+  { inf: "comer", type: "er", emoji: "🍜", en: "to eat", conj: { yo: "como", tú: "comes", "él/ella": "come" } },
+  { inf: "beber", type: "er", emoji: "🥤", en: "to drink", conj: { yo: "bebo", tú: "bebes", "él/ella": "bebe" } },
+  { inf: "vivir", type: "ir", emoji: "🏠", en: "to live", conj: { yo: "vivo", tú: "vives", "él/ella": "vive" } },
+  { inf: "escribir", type: "ir", emoji: "✏️", en: "to write", conj: { yo: "escribo", tú: "escribes", "él/ella": "escribe" } },
+];
+
+const persons = [
+  { label: "yo", emoji: "🙋", en: "I" },
+  { label: "tú", emoji: "👉", en: "you" },
+  { label: "él/ella", emoji: "👤", en: "he/she" },
+];
+
+const typeLabels = { ar: "verbo -AR", er: "verbo -ER", ir: "verbo -IR" };
+const container = document.getElementById('cardsContainer');
+
+// ── SECTION 1: Infinitive cards ────────────────────────────────────────
+addSectionTitle("🟥🟦🟪 Cartas de Infinitivo", "Imprime 2 copias por grupo", "#FF6B6B", "Infinitivos");
+const infGrid = document.createElement('div');
+infGrid.className = 'cards-section';
+const infCards = document.createElement('div');
+infCards.className = 'cards-grid cols-4';
+
+verbs.forEach(v => {
+  const card = document.createElement('div');
+  card.className = `card card-inf ${v.type}`;
+  card.innerHTML = `
+    <div class="card-top">${typeLabels[v.type]}</div>
+    <div class="card-emoji">${v.emoji}</div>
+    <div class="card-main">${v.inf}</div>
+    <div class="card-sub">${v.en}</div>`;
+  infCards.appendChild(card);
+});
+infGrid.appendChild(infCards);
+container.appendChild(infGrid);
+
+addCutLine();
+
+// ── SECTION 2: Conjugated form cards ──────────────────────────────────
+addSectionTitle("🟩 Cartas de Formas Conjugadas", "Imprime 2 copias por grupo", "#6BCB77", "Formas conjugadas");
+const formGrid = document.createElement('div');
+formGrid.className = 'cards-section';
+const formCards = document.createElement('div');
+formCards.className = 'cards-grid cols-4';
+
+verbs.forEach(v => {
+  persons.forEach(p => {
+    const form = v.conj[p.label];
+    const card = document.createElement('div');
+    card.className = 'card card-form';
+    card.innerHTML = `
+      <div class="card-top">${v.emoji} ${v.inf}</div>
+      <div class="card-main">${form}</div>
+      <div class="card-sub">${p.emoji} ${p.label}</div>
+      <div class="card-match">${p.en}: "${form}"</div>`;
+    formCards.appendChild(card);
+  });
+});
+formGrid.appendChild(formCards);
+container.appendChild(formGrid);
+
+addCutLine();
+
+// ── SECTION 3: Person cards ────────────────────────────────────────────
+addSectionTitle("🟧 Cartas de Persona", "Imprime 2 copias por grupo", "#FF9A3C", "Personas");
+const personGrid = document.createElement('div');
+personGrid.className = 'cards-section';
+const personCards = document.createElement('div');
+personCards.className = 'cards-grid cols-3';
+
+persons.forEach(p => {
+  // Make 3 copies of each person card
+  for (let i = 0; i < 3; i++) {
+    const card = document.createElement('div');
+    card.className = 'card card-person';
+    card.innerHTML = `
+      <div class="card-emoji">${p.emoji}</div>
+      <div class="card-main">${p.label}</div>
+      <div class="card-sub">${p.en}</div>`;
+    personCards.appendChild(card);
+  }
+});
+personGrid.appendChild(personCards);
+container.appendChild(personGrid);
+
+addCutLine();
+
+// ── SECTION 4: Wild cards ──────────────────────────────────────────────
+addSectionTitle("⭐ Cartas Comodín", "1 por mazo — vale como cualquier carta", "#FFE66D", "Comodines");
+const wildGrid = document.createElement('div');
+wildGrid.className = 'cards-section';
+const wildCards = document.createElement('div');
+wildCards.className = 'cards-grid cols-4';
+for (let i = 0; i < 4; i++) {
+  const card = document.createElement('div');
+  card.className = 'card card-wild';
+  card.innerHTML = `
+    <div class="card-emoji">⭐</div>
+    <div class="card-main" style="color:#b7950b">COMODÍN</div>
+    <div class="card-sub">vale como cualquier carta</div>`;
+  wildCards.appendChild(card);
+}
+wildGrid.appendChild(wildCards);
+container.appendChild(wildGrid);
+
+// ── ANSWER KEY ────────────────────────────────────────────────────────
+const key = document.createElement('div');
+key.className = 'answer-key';
+key.innerHTML = `<h2>🔑 Clave de respuestas — Solo para el profesor</h2>`;
+const table = document.createElement('table');
+table.className = 'answer-table';
+table.innerHTML = `<tr><th>Infinitivo</th><th>Persona</th><th>Forma correcta</th><th>En inglés</th></tr>`;
+verbs.forEach(v => {
+  persons.forEach(p => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="verb-col">${v.emoji} ${v.inf}</td>
+      <td class="person-col">${p.emoji} ${p.label}</td>
+      <td class="form-col">${v.conj[p.label]}</td>
+      <td class="en-col">${p.en} ${v.en.replace('to ','')}</td>`;
+    table.appendChild(tr);
+  });
+});
+key.appendChild(table);
+container.appendChild(key);
+
+// ── HELPERS ───────────────────────────────────────────────────────────
+function addSectionTitle(title, badge, color, id) {
+  const div = document.createElement('div');
+  div.className = 'section-title';
+  div.style.maxWidth = '700px';
+  div.style.margin = '0 auto 16px';
+  div.innerHTML = `
+    <h2 style="font-family:'Pacifico',cursive;font-size:1.2rem;color:${color}">${title}</h2>
+    <span class="badge" style="background:${color}22;color:${color};border:1px solid ${color}55">${badge}</span>`;
+  container.appendChild(div);
+}
+
+function addCutLine() {
+  const hr = document.createElement('hr');
+  hr.className = 'cut-line';
+  container.appendChild(hr);
+}
+</script>
+</body>
+</html>
