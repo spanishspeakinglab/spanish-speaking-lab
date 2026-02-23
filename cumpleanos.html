@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Feliz Cumpleaños! — Spanish Speaking Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --pink: #FF6B9D;
+  --yellow: #FFD93D;
+  --purple: #C77DFF;
+  --teal: #4ECDC4;
+  --orange: #FF9A3C;
+  --dark: #0d0d1a;
+  --card: #161622;
+  --border: #252535;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--dark);
+  min-height: 100vh;
+  padding: 20px;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* Confetti background */
+body::before {
+  content: '🎉🎂🎈🎊🎁🎶🎉🎂🎈🎊🎁🎶🎉🎂🎈🎊';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  font-size: 1.5rem;
+  opacity: 0.04;
+  letter-spacing: 20px;
+  line-height: 3rem;
+  word-break: break-all;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.stage { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
+
+/* ── Header ── */
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.brand { font-size: 0.68rem; font-weight: 800; color: #333; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+.header h1 {
+  font-family: 'Pacifico', cursive;
+  font-size: 3rem;
+  background: linear-gradient(135deg, var(--pink), var(--yellow), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+}
+.header p { color: #555; font-size: 0.9rem; font-weight: 700; }
+
+/* ── Year tabs ── */
+.year-tabs {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+.year-tab {
+  padding: 8px 22px;
+  border-radius: 50px;
+  border: 2.5px solid #333;
+  background: transparent;
+  color: #555;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.year-tab[data-year="7"].active { border-color: var(--pink); background: var(--pink); color: white; }
+.year-tab[data-year="8"].active { border-color: var(--teal); background: var(--teal); color: white; }
+.year-tab[data-year="9"].active { border-color: var(--purple); background: var(--purple); color: white; }
+
+/* ── Section tabs ── */
+.section-tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.section-tab {
+  padding: 8px 20px;
+  border-radius: 50px;
+  border: 2px solid #333;
+  background: transparent;
+  color: #444;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.section-tab.active { border-color: var(--yellow); background: rgba(255,217,61,0.1); color: var(--yellow); }
+
+/* ── Sections ── */
+.section { display: none; }
+.section.active { display: block; }
+
+/* ══════════════════════════════
+   KARAOKE SECTION
+══════════════════════════════ */
+.karaoke-wrap {
+  background: var(--card);
+  border-radius: 24px;
+  border: 2px solid var(--border);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.karaoke-wrap::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--pink), var(--yellow), var(--purple));
+}
+
+.song-title {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.song-title h2 {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.8rem;
+  color: var(--yellow);
+  margin-bottom: 4px;
+}
+.song-title p { font-size: 0.78rem; font-weight: 700; color: #444; letter-spacing: 2px; text-transform: uppercase; }
+
+.lyrics-container { margin-bottom: 24px; }
+
+.lyric-line {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  border-radius: 14px;
+  margin-bottom: 8px;
+  background: rgba(255,255,255,0.02);
+  border: 1.5px solid transparent;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.lyric-line.active {
+  background: rgba(255,217,61,0.1);
+  border-color: rgba(255,217,61,0.3);
+  transform: scale(1.01);
+}
+.lyric-line.sung {
+  background: rgba(78,205,196,0.06);
+  border-color: rgba(78,205,196,0.15);
+}
+.line-num {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #333;
+  width: 20px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.lyric-line.active .line-num { color: var(--yellow); }
+.line-spanish {
+  font-size: 1.2rem;
+  font-weight: 900;
+  flex: 1;
+  color: #ccc;
+}
+.lyric-line.active .line-spanish { color: var(--yellow); }
+.lyric-line.sung .line-spanish { color: var(--teal); }
+.line-english {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #333;
+  text-align: right;
+  flex-shrink: 0;
+}
+.lyric-line.active .line-english { color: #666; }
+
+.karaoke-controls {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.btn-karaoke {
+  padding: 11px 28px;
+  border-radius: 50px;
+  border: none;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--pink), var(--yellow));
+  color: #111;
+  box-shadow: 0 4px 20px rgba(255,107,157,0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); }
+.btn-secondary {
+  background: transparent;
+  border: 2px solid #333;
+  color: #555;
+}
+.btn-secondary:hover { border-color: #555; color: #888; }
+
+.translation-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #444;
+  cursor: pointer;
+}
+.toggle-switch {
+  width: 36px;
+  height: 20px;
+  background: #333;
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.2s;
+}
+.toggle-switch.on { background: var(--teal); }
+.toggle-dot {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 14px;
+  height: 14px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+.toggle-switch.on .toggle-dot { transform: translateX(16px); }
+
+/* Print lyrics */
+.print-lyrics-btn {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+}
+
+/* ══════════════════════════════
+   ROMPECABEZAS — DRAG & DROP
+══════════════════════════════ */
+.puzzle-wrap {
+  background: var(--card);
+  border-radius: 24px;
+  border: 2px solid var(--border);
+  padding: 28px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.puzzle-wrap::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--purple), var(--pink), var(--orange));
+}
+
+.puzzle-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.puzzle-title h2 { font-family: 'Pacifico', cursive; font-size: 1.6rem; color: var(--purple); margin-bottom: 4px; }
+.puzzle-title p { font-size: 0.78rem; font-weight: 700; color: #444; }
+
+.puzzle-sentences { margin-bottom: 20px; }
+.puzzle-sentence {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.02);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.sentence-prefix {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #888;
+  white-space: nowrap;
+}
+.drop-zone {
+  min-width: 140px;
+  min-height: 38px;
+  border: 2.5px dashed #333;
+  border-radius: 10px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #444;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.drop-zone.dragover { border-color: var(--purple); background: rgba(199,125,255,0.1); }
+.drop-zone.correct { border-color: var(--teal); background: rgba(78,205,196,0.1); color: var(--teal); border-style: solid; }
+.drop-zone.wrong { border-color: var(--pink); background: rgba(255,107,157,0.1); color: var(--pink); border-style: solid; animation: shake 0.3s ease; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.sentence-suffix { font-size: 0.9rem; font-weight: 800; color: #888; }
+.sentence-hint { font-size: 0.72rem; font-weight: 600; color: #333; font-style: italic; width: 100%; margin-top: 2px; }
+
+.word-bank {
+  background: rgba(255,255,255,0.02);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.word-bank-title { font-size: 0.68rem; font-weight: 800; color: #333; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 12px; }
+.word-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.word-chip {
+  padding: 8px 16px;
+  border-radius: 50px;
+  background: rgba(199,125,255,0.15);
+  border: 2px solid rgba(199,125,255,0.3);
+  color: var(--purple);
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: grab;
+  transition: all 0.2s;
+  user-select: none;
+}
+.word-chip:hover { background: rgba(199,125,255,0.25); transform: translateY(-2px); }
+.word-chip.dragging { opacity: 0.4; }
+.word-chip.used { opacity: 0.2; pointer-events: none; }
+
+.puzzle-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.score-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 50px;
+  background: rgba(255,217,61,0.1);
+  border: 1.5px solid rgba(255,217,61,0.2);
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--yellow);
+}
+
+/* ══════════════════════════════
+   MATCHING GAME
+══════════════════════════════ */
+.match-wrap {
+  background: var(--card);
+  border-radius: 24px;
+  border: 2px solid var(--border);
+  padding: 28px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.match-wrap::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--orange), var(--yellow), var(--teal));
+}
+
+.match-title { text-align: center; margin-bottom: 20px; }
+.match-title h2 { font-family: 'Pacifico', cursive; font-size: 1.6rem; color: var(--orange); margin-bottom: 4px; }
+.match-title p { font-size: 0.78rem; font-weight: 700; color: #444; }
+
+.match-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.match-col-title {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.match-card {
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 2px solid var(--border);
+  background: rgba(255,255,255,0.02);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.match-card:hover { border-color: var(--orange); background: rgba(255,154,60,0.08); }
+.match-card.selected { border-color: var(--yellow); background: rgba(255,217,61,0.12); color: var(--yellow); transform: scale(1.02); }
+.match-card.correct { border-color: var(--teal); background: rgba(78,205,196,0.12); color: var(--teal); pointer-events: none; }
+.match-card.wrong { border-color: var(--pink); background: rgba(255,107,157,0.12); color: var(--pink); animation: shake 0.3s ease; }
+.match-card.spanish { color: #ddd; }
+.match-card.english { color: #888; font-weight: 700; font-size: 0.85rem; }
+
+.match-controls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+/* ══════════════════════════════
+   VOCAB SECTION
+══════════════════════════════ */
+.vocab-wrap {
+  background: var(--card);
+  border-radius: 20px;
+  border: 2px solid var(--border);
+  padding: 24px;
+}
+.vocab-title { font-size: 0.68rem; font-weight: 800; color: #333; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 14px; text-align: center; }
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.vocab-item {
+  background: rgba(255,255,255,0.03);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.vocab-emoji { font-size: 1.4rem; flex-shrink: 0; }
+.vocab-sp { font-size: 0.88rem; font-weight: 800; color: #ddd; display: block; }
+.vocab-en { font-size: 0.72rem; font-weight: 600; color: #444; display: block; }
+
+/* ── Celebration ── */
+.celebration {
+  text-align: center;
+  padding: 30px;
+  display: none;
+}
+.celebration.show { display: block; animation: popIn 0.5s ease; }
+@keyframes popIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.celebration .trophy { font-size: 4rem; margin-bottom: 10px; }
+.celebration h2 { font-family: 'Pacifico', cursive; font-size: 2rem; color: var(--yellow); margin-bottom: 8px; }
+.celebration p { color: #555; font-size: 0.9rem; font-weight: 700; }
+
+@media print {
+  body { background: white; color: #111; padding: 0; }
+  body::before { display: none; }
+  .year-tabs, .section-tabs, .karaoke-controls, .puzzle-controls, .match-controls, .word-bank { display: none; }
+  .section { display: block !important; }
+  .karaoke-wrap, .puzzle-wrap, .match-wrap, .vocab-wrap { background: white; border: 2px solid #ddd; page-break-inside: avoid; margin-bottom: 20px; }
+  .karaoke-wrap::before, .puzzle-wrap::before, .match-wrap::before { display: none; }
+  .lyric-line { background: #f9f9f9 !important; border-color: #eee !important; }
+  .lyric-line.active { background: #f9f9f9 !important; }
+  .line-spanish { color: #111 !important; }
+  .puzzle-sentence { background: #f9f9f9; border-color: #ddd; }
+  .match-card { background: #f9f9f9 !important; border-color: #ddd !important; color: #111 !important; }
+  .vocab-item { background: #f9f9f9; border-color: #ddd; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <div class="header">
+    <div class="brand">Spanish Speaking Lab · by Pat Calzadilla</div>
+    <h1>🎂 ¡Feliz Cumpleaños!</h1>
+    <p>Elige tu año y la actividad — ¡a celebrar en español!</p>
+  </div>
+
+  <div class="year-tabs">
+    <button class="year-tab active" data-year="7" onclick="setYear(7)">⭐ Año 7</button>
+    <button class="year-tab" data-year="8" onclick="setYear(8)">⭐⭐ Año 8</button>
+    <button class="year-tab" data-year="9" onclick="setYear(9)">⭐⭐⭐ Año 9</button>
+  </div>
+
+  <div class="section-tabs">
+    <button class="section-tab active" onclick="setSection('karaoke')">🎵 Canción</button>
+    <button class="section-tab" onclick="setSection('puzzle')">🧩 Arrastra las palabras</button>
+    <button class="section-tab" onclick="setSection('match')">🔗 Une la palabra</button>
+  </div>
+
+  <!-- KARAOKE -->
+  <div class="section active" id="sec-karaoke">
+    <div class="karaoke-wrap">
+      <div class="song-title">
+        <h2>🎵 Cumpleaños Feliz</h2>
+        <p id="karaoke-subtitle">Canta junto con tu clase · haz clic en cada línea</p>
+      </div>
+      <div class="lyrics-container" id="lyricsContainer"></div>
+      <div class="karaoke-controls">
+        <button class="btn-karaoke btn-secondary" onclick="prevLine()">⬅ Anterior</button>
+        <button class="btn-karaoke btn-primary" onclick="nextLine()">▶ Siguiente línea</button>
+        <button class="btn-karaoke btn-secondary" onclick="resetKaraoke()">🔄 Empezar</button>
+        <label class="translation-toggle" onclick="toggleTranslation()">
+          <div class="toggle-switch" id="transToggle"><div class="toggle-dot"></div></div>
+          <span id="transLabel">Traducción: ON</span>
+        </label>
+      </div>
+    </div>
+    <div class="vocab-wrap" id="vocabSection"></div>
+  </div>
+
+  <!-- PUZZLE -->
+  <div class="section" id="sec-puzzle">
+    <div class="puzzle-wrap">
+      <div class="puzzle-title">
+        <h2>🧩 Arrastra las palabras</h2>
+        <p id="puzzle-subtitle">Arrastra la palabra correcta a cada espacio</p>
+      </div>
+      <div class="puzzle-sentences" id="puzzleSentences"></div>
+      <div class="word-bank">
+        <div class="word-bank-title">🏦 Banco de palabras</div>
+        <div class="word-chips" id="wordChips"></div>
+      </div>
+      <div class="puzzle-controls">
+        <button class="btn-karaoke btn-secondary" onclick="resetPuzzle()">🔄 Reintentar</button>
+        <div class="score-badge" id="puzzleScore">0 / 0 correctas</div>
+        <button class="btn-karaoke btn-primary" onclick="checkPuzzle()">✅ Comprobar</button>
+      </div>
+      <div class="celebration" id="puzzleCelebration">
+        <div class="trophy">🎉</div>
+        <h2>¡Perfecto!</h2>
+        <p>¡Has completado el rompecabezas! ¡Tú puedes! 💪</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATCH -->
+  <div class="section" id="sec-match">
+    <div class="match-wrap">
+      <div class="match-title">
+        <h2>🔗 Une la palabra con su significado</h2>
+        <p id="match-subtitle">Haz clic en una palabra en español y luego en su traducción</p>
+      </div>
+      <div class="match-grid">
+        <div>
+          <div class="match-col-title">Español</div>
+          <div id="matchSpanish"></div>
+        </div>
+        <div>
+          <div class="match-col-title">English</div>
+          <div id="matchEnglish"></div>
+        </div>
+      </div>
+      <div class="match-controls">
+        <button class="btn-karaoke btn-secondary" onclick="resetMatch()">🔄 Reintentar</button>
+        <div class="score-badge" id="matchScore">0 / 0 correctas</div>
+      </div>
+      <div class="celebration" id="matchCelebration">
+        <div class="trophy">🌟</div>
+        <h2>¡Increíble!</h2>
+        <p>¡Has unido todas las palabras! ¡Eres un crack! 🎂</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var currentYear = 7;
+var currentSection = 'karaoke';
+var currentLine = -1;
+var showTranslation = true;
+var draggedChip = null;
+var matchSelected = null;
+var matchCorrect = 0;
+
+var yearData = {
+  7: {
+    lyrics: [
+      { spanish: 'Cumpleaños feliz,', english: 'Happy birthday to you,' },
+      { spanish: 'te deseamos a ti,', english: 'we wish it to you,' },
+      { spanish: 'Cumpleaños ___(nombre),', english: 'Happy birthday ___(name),' },
+      { spanish: 'Cumpleaños feliz.', english: 'Happy birthday.' },
+      { spanish: '---',                         english: '---' },
+      { spanish: '¿Cuántos años tienes?',       english: 'How old are you?' },
+      { spanish: 'Tengo ___ años.',             english: 'I am ___ years old.' },
+      { spanish: '¡Feliz cumpleaños!',          english: 'Happy birthday!' },
+    ],
+    subtitle: 'Canta línea por línea · pon el nombre de tu compañero/a',
+    puzzle: [
+      { prefix: 'Hoy es mi', answer: 'cumpleaños', suffix: '.', hint: 'Today is my ___' },
+      { prefix: 'Tengo', answer: 'doce', suffix: 'años.', hint: 'I am twelve years old.' },
+      { prefix: '¡Feliz', answer: 'cumpleaños', suffix: '!', hint: 'Happy birthday!' },
+      { prefix: 'Me gustan los', answer: 'regalos', suffix: '.', hint: 'I like presents.' },
+      { prefix: 'Me gusta el', answer: 'pastel', suffix: 'de cumpleaños.', hint: 'I like birthday cake.' },
+    ],
+    wordBank: ['cumpleaños', 'doce', 'regalos', 'pastel', 'cumpleaños'],
+    match: [
+      { sp: 'el cumpleaños', en: 'the birthday' },
+      { sp: 'el pastel', en: 'the cake' },
+      { sp: 'el regalo', en: 'the present' },
+      { sp: 'las velas', en: 'the candles' },
+      { sp: 'la fiesta', en: 'the party' },
+      { sp: '¡Feliz cumpleaños!', en: 'Happy birthday!' },
+    ],
+    vocab: [
+      { emoji: '🎂', sp: 'el cumpleaños', en: 'the birthday' },
+      { emoji: '🎂', sp: 'el pastel', en: 'the cake' },
+      { emoji: '🎁', sp: 'el regalo', en: 'the present' },
+      { emoji: '🕯️', sp: 'las velas', en: 'the candles' },
+      { emoji: '🎉', sp: 'la fiesta', en: 'the party' },
+      { emoji: '🎈', sp: 'el globo', en: 'the balloon' },
+      { emoji: '🎵', sp: 'la canción', en: 'the song' },
+      { emoji: '😊', sp: '¡Feliz cumpleaños!', en: 'Happy birthday!' },
+    ]
+  },
+  8: {
+    lyrics: [
+      { spanish: 'Cumpleaños feliz,', english: 'Happy birthday to you,' },
+      { spanish: 'te deseamos a ti,', english: 'we wish it to you,' },
+      { spanish: 'Cumpleaños ___(nombre),', english: 'Happy birthday ___(name),' },
+      { spanish: 'Cumpleaños feliz.', english: 'Happy birthday.' },
+      { spanish: '---',                                  english: '---' },
+      { spanish: '¿Cuántos años cumples hoy?',           english: 'How old are you turning today?' },
+      { spanish: 'Cumplo ___ años.',                     english: 'I am turning ___ years old.' },
+      { spanish: '¿Cuándo es tu cumpleaños?',            english: 'When is your birthday?' },
+      { spanish: 'Mi cumpleaños es el ___ de ___.',      english: 'My birthday is on the ___ of ___.' },
+      { spanish: '¡Que cumplas muchos más!',             english: 'May you have many more!' },
+    ],
+    subtitle: 'Canta y practica · rellena ___ con tus datos',
+    puzzle: [
+      { prefix: 'Hoy cumplo', answer: 'catorce', suffix: 'años.', hint: 'Today I am turning fourteen.' },
+      { prefix: 'Mi cumpleaños es en el mes de', answer: 'marzo', suffix: '.', hint: 'My birthday is in March.' },
+      { prefix: '¡Que cumplas', answer: 'muchos', suffix: 'más!', hint: 'May you have many more!' },
+      { prefix: 'Hay una', answer: 'fiesta', suffix: 'esta noche.', hint: 'There is a party tonight.' },
+      { prefix: 'Me encantan los', answer: 'regalos', suffix: 'de cumpleaños.', hint: 'I love birthday presents.' },
+      { prefix: 'Vamos a cantar la', answer: 'canción', suffix: '.', hint: 'We are going to sing the song.' },
+    ],
+    wordBank: ['catorce', 'marzo', 'muchos', 'fiesta', 'regalos', 'canción'],
+    match: [
+      { sp: '¿Cuántos años cumples?', en: 'How old are you turning?' },
+      { sp: 'Cumplo ___ años', en: 'I am turning ___ years old' },
+      { sp: '¿Cuándo es tu cumpleaños?', en: 'When is your birthday?' },
+      { sp: 'Mi cumpleaños es en...', en: 'My birthday is in...' },
+      { sp: '¡Que cumplas muchos más!', en: 'May you have many more!' },
+      { sp: 'la tarta', en: 'the cake' },
+      { sp: 'soplar las velas', en: 'to blow the candles' },
+      { sp: 'pedir un deseo', en: 'to make a wish' },
+    ],
+    vocab: [
+      { emoji: '🎂', sp: '¿Cuántos años cumples?', en: 'How old are you turning?' },
+      { emoji: '📅', sp: '¿Cuándo es tu cumpleaños?', en: 'When is your birthday?' },
+      { emoji: '🎂', sp: 'Cumplo ___ años', en: 'I am turning ___ years old' },
+      { emoji: '🗓️', sp: 'Mi cumpleaños es el...', en: 'My birthday is on the...' },
+      { emoji: '🎉', sp: '¡Que cumplas muchos más!', en: 'May you have many more!' },
+      { emoji: '🕯️', sp: 'soplar las velas', en: 'to blow the candles' },
+      { emoji: '⭐', sp: 'pedir un deseo', en: 'to make a wish' },
+      { emoji: '🎁', sp: '¡Muchas felicidades!', en: 'Congratulations / Many happy returns!' },
+    ]
+  },
+  9: {
+    lyrics: [
+      { spanish: 'Cumpleaños feliz,', english: 'Happy birthday to you,' },
+      { spanish: 'te deseamos a ti,', english: 'we wish it to you,' },
+      { spanish: 'Cumpleaños ___(nombre),', english: 'Happy birthday ___(name),' },
+      { spanish: 'Cumpleaños feliz.', english: 'Happy birthday.' },
+      { spanish: '---',                                       english: '---' },
+      { spanish: '¿Cuándo es tu cumpleaños?',                 english: 'When is your birthday?' },
+      { spanish: 'Mi cumpleaños es el ___ de ___ .',          english: 'My birthday is on the ___ of ___.' },
+      { spanish: '¿Cómo celebras tu cumpleaños?',             english: 'How do you celebrate your birthday?' },
+      { spanish: 'Celebro mi cumpleaños con mi familia.',     english: 'I celebrate my birthday with my family.' },
+      { spanish: 'Comemos pastel y cantamos.',                english: 'We eat cake and we sing.' },
+      { spanish: '¡Que cumplas muchos más!',                  english: 'May you have many more!' },
+    ],
+    subtitle: 'Canta · practica las preguntas · ¡sin mirar!',
+    puzzle: [
+      { prefix: 'Mi cumpleaños es el', answer: 'quince', suffix: 'de agosto.', hint: 'My birthday is on the fifteenth of August.' },
+      { prefix: 'Celebro con mi', answer: 'familia', suffix: 'y mis amigos.', hint: 'I celebrate with my family and friends.' },
+      { prefix: 'Comemos', answer: 'pastel', suffix: 'y cantamos canciones.', hint: 'We eat cake and sing songs.' },
+      { prefix: 'Me encanta', answer: 'soplar', suffix: 'las velas.', hint: 'I love to blow the candles.' },
+      { prefix: 'Pido un', answer: 'deseo', suffix: 'cuando soplo.', hint: 'I make a wish when I blow.' },
+      { prefix: 'Recibo muchos', answer: 'regalos', suffix: 'de mis amigos.', hint: 'I receive many presents from my friends.' },
+    ],
+    wordBank: ['quince', 'familia', 'pastel', 'soplar', 'deseo', 'regalos'],
+    match: [
+      { sp: '¿Cómo celebras tu cumpleaños?', en: 'How do you celebrate your birthday?' },
+      { sp: 'Celebro con mi familia', en: 'I celebrate with my family' },
+      { sp: 'Comemos pastel', en: 'We eat cake' },
+      { sp: 'soplar las velas', en: 'to blow the candles' },
+      { sp: 'pedir un deseo', en: 'to make a wish' },
+      { sp: 'recibir regalos', en: 'to receive presents' },
+      { sp: '¡Muchas felicidades!', en: 'Many happy returns!' },
+      { sp: '¡Que cumplas muchos más!', en: 'May you have many more!' },
+    ],
+    vocab: [
+      { emoji: '📅', sp: '¿Cuándo es tu cumpleaños?', en: 'When is your birthday?' },
+      { emoji: '🎉', sp: '¿Cómo celebras?', en: 'How do you celebrate?' },
+      { emoji: '👨‍👩‍👦', sp: 'celebrar con la familia', en: 'to celebrate with family' },
+      { emoji: '🎂', sp: 'comer pastel', en: 'to eat cake' },
+      { emoji: '🕯️', sp: 'soplar las velas', en: 'to blow the candles' },
+      { emoji: '⭐', sp: 'pedir un deseo', en: 'to make a wish' },
+      { emoji: '🎁', sp: 'recibir regalos', en: 'to receive presents' },
+      { emoji: '🎊', sp: '¡Muchas felicidades!', en: 'Many happy returns!' },
+    ]
+  }
+};
+
+// ── YEAR & SECTION ──
+function setYear(y) {
+  currentYear = y;
+  document.querySelectorAll('.year-tab').forEach(function(t) {
+    t.classList.toggle('active', parseInt(t.dataset.year) === y);
+  });
+  resetAll();
+}
+
+function setSection(s) {
+  currentSection = s;
+  document.querySelectorAll('.section-tab').forEach(function(t, i) {
+    t.classList.toggle('active', ['karaoke','puzzle','match'][i] === s);
+  });
+  document.querySelectorAll('.section').forEach(function(el) { el.classList.remove('active'); });
+  document.getElementById('sec-' + s).classList.add('active');
+}
+
+function resetAll() {
+  buildKaraoke();
+  buildPuzzle();
+  buildMatch();
+  buildVocab();
+}
+
+// ── KARAOKE ──
+function buildKaraoke() {
+  currentLine = -1;
+  var d = yearData[currentYear];
+  document.getElementById('karaoke-subtitle').textContent = d.subtitle;
+  var container = document.getElementById('lyricsContainer');
+  container.innerHTML = '';
+  d.lyrics.forEach(function(line, i) {
+    if (line.spanish === '---') {
+      var sep = document.createElement('div');
+      sep.style.cssText = 'text-align:center;color:#222;font-size:1.2rem;padding:6px;margin:4px 0;';
+      sep.textContent = '· · ·';
+      container.appendChild(sep);
+      return;
+    }
+    var div = document.createElement('div');
+    div.className = 'lyric-line';
+    div.dataset.index = i;
+    div.innerHTML =
+      '<span class="line-num">' + (i + 1) + '</span>' +
+      '<span class="line-spanish">' + line.spanish + '</span>' +
+      '<span class="line-english" style="display:' + (showTranslation ? 'block' : 'none') + '">' + line.english + '</span>';
+    div.onclick = function() { jumpToLine(parseInt(this.dataset.index)); };
+    container.appendChild(div);
+  });
+}
+
+function jumpToLine(i) {
+  currentLine = i;
+  highlightLine();
+}
+
+function nextLine() {
+  var d = yearData[currentYear];
+  do { currentLine++; } while (currentLine < d.lyrics.length && d.lyrics[currentLine].spanish === '---');
+  if (currentLine >= d.lyrics.length) { currentLine = d.lyrics.length; }
+  highlightLine();
+}
+
+function prevLine() {
+  var d = yearData[currentYear];
+  do { currentLine--; } while (currentLine >= 0 && d.lyrics[currentLine].spanish === '---');
+  if (currentLine < 0) currentLine = 0;
+  highlightLine();
+}
+
+function highlightLine() {
+  var d = yearData[currentYear];
+  document.querySelectorAll('.lyric-line').forEach(function(el) {
+    var idx = parseInt(el.dataset.index);
+    el.classList.remove('active', 'sung');
+    if (idx === currentLine) el.classList.add('active');
+    else if (idx < currentLine) el.classList.add('sung');
+  });
+  var active = document.querySelector('.lyric-line.active');
+  if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function resetKaraoke() { buildKaraoke(); }
+
+function toggleTranslation() {
+  showTranslation = !showTranslation;
+  var tog = document.getElementById('transToggle');
+  tog.classList.toggle('on', showTranslation);
+  document.getElementById('transLabel').textContent = 'Traducción: ' + (showTranslation ? 'ON' : 'OFF');
+  document.querySelectorAll('.line-english').forEach(function(el) {
+    el.style.display = showTranslation ? 'block' : 'none';
+  });
+}
+
+// ── PUZZLE ──
+function buildPuzzle() {
+  var d = yearData[currentYear];
+  document.getElementById('puzzle-subtitle').textContent = 'Arrastra la palabra correcta a cada espacio — Año ' + currentYear;
+  document.getElementById('puzzleCelebration').classList.remove('show');
+  document.getElementById('puzzleScore').textContent = '0 / ' + d.puzzle.length + ' correctas';
+
+  var sentContainer = document.getElementById('puzzleSentences');
+  sentContainer.innerHTML = '';
+  d.puzzle.forEach(function(s, i) {
+    var div = document.createElement('div');
+    div.className = 'puzzle-sentence';
+    div.innerHTML =
+      '<span class="sentence-prefix">' + s.prefix + '</span>' +
+      '<div class="drop-zone" data-index="' + i + '" data-answer="' + s.answer + '">' +
+        '<span class="placeholder">___</span>' +
+      '</div>' +
+      (s.suffix ? '<span class="sentence-suffix">' + s.suffix + '</span>' : '') +
+      '<span class="sentence-hint">' + s.hint + '</span>';
+    sentContainer.appendChild(div);
+  });
+
+  // Setup drop zones
+  document.querySelectorAll('.drop-zone').forEach(function(zone) {
+    zone.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('dragover'); });
+    zone.addEventListener('dragleave', function() { this.classList.remove('dragover'); });
+    zone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.classList.remove('dragover');
+      if (!draggedChip) return;
+      var prev = this.dataset.currentChip;
+      if (prev) {
+        // return old chip
+        var oldChip = document.querySelector('.word-chip[data-word="' + prev + '"].used');
+        if (oldChip) { oldChip.classList.remove('used'); oldChip.draggable = true; }
+      }
+      this.dataset.currentChip = draggedChip.dataset.word;
+      this.textContent = draggedChip.dataset.word;
+      this.classList.remove('correct', 'wrong');
+      draggedChip.classList.add('used');
+      draggedChip.draggable = false;
+      draggedChip = null;
+    });
+    // Touch support
+    zone.addEventListener('click', function() {
+      if (draggedChip) {
+        var prev = this.dataset.currentChip;
+        if (prev) {
+          var oldChip = document.querySelector('.word-chip[data-word="' + prev + '"].used');
+          if (oldChip) { oldChip.classList.remove('used'); oldChip.draggable = true; }
+        }
+        this.dataset.currentChip = draggedChip.dataset.word;
+        this.textContent = draggedChip.dataset.word;
+        this.classList.remove('correct', 'wrong');
+        draggedChip.classList.add('used');
+        draggedChip.draggable = false;
+        document.querySelectorAll('.word-chip').forEach(function(c) { c.style.outline = 'none'; });
+        draggedChip = null;
+      }
+    });
+  });
+
+  // Word bank
+  var chipsContainer = document.getElementById('wordChips');
+  chipsContainer.innerHTML = '';
+  var shuffled = d.wordBank.slice().sort(function() { return Math.random() - 0.5; });
+  shuffled.forEach(function(word) {
+    var chip = document.createElement('div');
+    chip.className = 'word-chip';
+    chip.textContent = word;
+    chip.dataset.word = word;
+    chip.draggable = true;
+    chip.addEventListener('dragstart', function() { draggedChip = this; this.classList.add('dragging'); });
+    chip.addEventListener('dragend', function() { this.classList.remove('dragging'); });
+    chip.addEventListener('click', function() {
+      if (this.classList.contains('used')) return;
+      document.querySelectorAll('.word-chip').forEach(function(c) { c.style.outline = 'none'; });
+      draggedChip = chip;
+      chip.style.outline = '3px solid var(--yellow)';
+    });
+    chipsContainer.appendChild(chip);
+  });
+}
+
+function checkPuzzle() {
+  var d = yearData[currentYear];
+  var correct = 0;
+  document.querySelectorAll('.drop-zone').forEach(function(zone, i) {
+    var ans = d.puzzle[i].answer;
+    var given = zone.dataset.currentChip || '';
+    if (given === ans) { zone.classList.add('correct'); zone.classList.remove('wrong'); correct++; }
+    else if (given) { zone.classList.add('wrong'); zone.classList.remove('correct'); }
+  });
+  document.getElementById('puzzleScore').textContent = correct + ' / ' + d.puzzle.length + ' correctas';
+  if (correct === d.puzzle.length) {
+    document.getElementById('puzzleCelebration').classList.add('show');
+  }
+}
+
+function resetPuzzle() { buildPuzzle(); }
+
+// ── MATCH ──
+function buildMatch() {
+  var d = yearData[currentYear];
+  matchSelected = null;
+  matchCorrect = 0;
+  document.getElementById('matchCelebration').classList.remove('show');
+  document.getElementById('matchScore').textContent = '0 / ' + d.match.length + ' correctas';
+  document.getElementById('match-subtitle').textContent = 'Haz clic en una palabra en español y luego en su traducción — Año ' + currentYear;
+
+  var spCol = document.getElementById('matchSpanish');
+  var enCol = document.getElementById('matchEnglish');
+  spCol.innerHTML = '';
+  enCol.innerHTML = '';
+
+  // Shuffle both columns independently — guarantee no pair lands at same row
+  var indices = d.match.map(function(_, i) { return i; });
+  var shuffledSp = indices.slice().sort(function() { return Math.random() - 0.5; });
+  var shuffledEn;
+  var attempts = 0;
+  do {
+    shuffledEn = indices.slice().sort(function() { return Math.random() - 0.5; });
+    attempts++;
+  } while (attempts < 30 && shuffledEn.some(function(enIdx, pos) { return enIdx === shuffledSp[pos]; }));
+
+  shuffledSp.forEach(function(pairIdx) {
+    var pair = d.match[pairIdx];
+    var spCard = document.createElement('div');
+    spCard.className = 'match-card spanish';
+    spCard.textContent = pair.sp;
+    spCard.dataset.pair = pairIdx;
+    spCard.dataset.type = 'sp';
+    spCard.onclick = function() { selectMatchCard(this); };
+    spCol.appendChild(spCard);
+  });
+
+  shuffledEn.forEach(function(pairIdx) {
+    var pair = d.match[pairIdx];
+    var enCard = document.createElement('div');
+    enCard.className = 'match-card english';
+    enCard.textContent = pair.en;
+    enCard.dataset.pair = pairIdx;
+    enCard.dataset.type = 'en';
+    enCard.onclick = function() { selectMatchCard(this); };
+    enCol.appendChild(enCard);
+  });
+}
+
+function selectMatchCard(card) {
+  if (card.classList.contains('correct')) return;
+
+  if (!matchSelected) {
+    card.classList.add('selected');
+    matchSelected = card;
+  } else {
+    if (matchSelected === card) { card.classList.remove('selected'); matchSelected = null; return; }
+    if (matchSelected.dataset.type === card.dataset.type) {
+      matchSelected.classList.remove('selected');
+      matchSelected = card;
+      card.classList.add('selected');
+      return;
+    }
+    if (matchSelected.dataset.pair === card.dataset.pair) {
+      matchSelected.classList.remove('selected');
+      matchSelected.classList.add('correct');
+      card.classList.add('correct');
+      matchCorrect++;
+      var d = yearData[currentYear];
+      document.getElementById('matchScore').textContent = matchCorrect + ' / ' + d.match.length + ' correctas';
+      if (matchCorrect === d.match.length) {
+        document.getElementById('matchCelebration').classList.add('show');
+      }
+    } else {
+      matchSelected.classList.remove('selected');
+      matchSelected.classList.add('wrong');
+      card.classList.add('wrong');
+      var ms = matchSelected, c = card;
+      setTimeout(function() { ms.classList.remove('wrong'); c.classList.remove('wrong'); }, 800);
+    }
+    matchSelected = null;
+  }
+}
+
+function resetMatch() { buildMatch(); }
+
+// ── VOCAB ──
+function buildVocab() {
+  var d = yearData[currentYear];
+  var box = document.getElementById('vocabSection');
+  var items = d.vocab.map(function(v) {
+    return '<div class="vocab-item"><span class="vocab-emoji">' + v.emoji + '</span>' +
+      '<span><span class="vocab-sp">' + v.sp + '</span><span class="vocab-en">' + v.en + '</span></span></div>';
+  }).join('');
+  box.innerHTML = '<div class="vocab-title">📖 Vocabulario del cumpleaños</div><div class="vocab-grid">' + items + '</div>';
+}
+
+// Init
+resetAll();
+</script>
+</body>
+</html>
